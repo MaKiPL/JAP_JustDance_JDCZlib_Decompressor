@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -132,8 +133,15 @@ namespace JAP_JustDance_JDCZlib_Decompressor
         public static string doDeCompress(byte[] source, int length)
         {
             string result = string.Empty;
-            IntPtr ptr = JDCZlibDeCompress(source, length);
-            result = Marshal.PtrToStringAnsi(ptr);
+            try
+            {
+                IntPtr ptr = JDCZlibDeCompress(source, length);
+                result = Marshal.PtrToStringAnsi(ptr);
+            }
+            catch
+            {
+                
+            }
             return result;
         }
     }
