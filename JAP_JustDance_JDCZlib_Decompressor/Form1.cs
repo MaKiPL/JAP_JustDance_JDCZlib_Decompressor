@@ -122,7 +122,7 @@ namespace JAP_JustDance_JDCZlib_Decompressor
             int num2 = stringConvertToNumber(utf, 36);
             int num4 = num2 & 4194303;
 
-            byte[] retbuf = new byte[4096];
+            byte[] retbuf = new byte[num4];
             Array.Copy(message, 0 + 5, retbuf, 0, num4);
             string result = doDeCompress(retbuf, num4);
             File.WriteAllText(textBox2.Text, result);
