@@ -127,7 +127,6 @@ namespace JAP_JustDance_JDCZlib_Decompressor
             string result = doDeCompress(retbuf, num4);
             File.WriteAllText(textBox2.Text, result);
             MessageBox.Show("DONE!");
-
         }
 
         public static string doDeCompress(byte[] source, int length)
@@ -143,6 +142,18 @@ namespace JAP_JustDance_JDCZlib_Decompressor
                 
             }
             return result;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text) ||
+    string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                MessageBox.Show("Set paths!");
+                return;
+            }
+
+
         }
     }
 }
