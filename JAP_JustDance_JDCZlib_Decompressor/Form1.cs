@@ -19,6 +19,9 @@ namespace JAP_JustDance_JDCZlib_Decompressor
         private static extern IntPtr JDCZlibDeCompress([MarshalAs(UnmanagedType.LPArray)] byte[] source, int length);
 
         [DllImport("JDCZlibForUnity")]
+        private static extern bool JDCZlibCompress(string source, ref long resultAddress, ref long resultSize);
+
+        [DllImport("JDCZlibForUnity")]
         private static extern void JDCZlibInitialize();
 
         public Form1()
@@ -119,8 +122,8 @@ namespace JAP_JustDance_JDCZlib_Decompressor
             }
             byte[] message = File.ReadAllBytes(textBox1.Text);
             string utf = Encoding.UTF8.GetString(message, 0, 5);
-            int num2 = stringConvertToNumber(utf, 36);
-            int num4 = num2 & 4194303;
+            int num2 = stringConvertToNumber(utf, 0x24);
+            int num4 = num2 & 0x3fffff;
 
             byte[] retbuf = new byte[num4];
             Array.Copy(message, 0 + 5, retbuf, 0, num4);
@@ -153,7 +156,37 @@ namespace JAP_JustDance_JDCZlib_Decompressor
                 return;
             }
 
+            byte[] result;
 
+            string source = File.ReadAllText(textBox1.Text);
+
+            long value = 0L;
+            long num = 0L;
+            bool flag = false;
+            try
+            {
+                flag = JDCZlibCompress(source, ref value, ref num);
+            }
+            catch
+            {
+            }
+            
+            if (flag)
+            {
+                IntPtr source2 = new IntPtr(value);
+                byte[] array = new byte[num];
+                Marshal.Copy(source2, array, 0, (int)num);
+                result = array;
+            }
+            else
+            {
+                MessageBox.Show("Native DLL crashed. Maybe bad input file?");
+                return;
+            }
+
+            //Now the ASCII length header
+
+            File.WriteAllBytes(textBox2.Text, result);
         }
     }
 }
