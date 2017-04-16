@@ -186,7 +186,34 @@ namespace JAP_JustDance_JDCZlib_Decompressor
 
             //Now the ASCII length header
 
-            File.WriteAllBytes(textBox2.Text, result);
+            int header = (int) (num | 1 << 22);
+            int startIdx = 0;
+
+            byte[] buffer = new byte[num+5];
+            Array.Copy(result,0,buffer,5, num);
+
+            for (int i = 4; i >= 0; i--)
+            {
+                num = header % 36;
+                header /= 36;
+                byte b;
+                if (num >= 10)
+                {
+                    b = (byte)(65 + num - 10);
+                }
+                else
+                {
+                    b = (byte)(48 + num);
+                }
+                buffer[startIdx + i] = b;
+            }
+            if (header > 0)
+            {
+            }
+
+
+            File.WriteAllBytes(textBox2.Text, buffer);
+            MessageBox.Show("DONE!");
         }
     }
 }
